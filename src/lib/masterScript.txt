@@ -1,0 +1,1277 @@
+
+<script>
+(function () {
+  var applied = false;
+
+  function styleTitle() {
+  if (applied && !document.getElementById('tms-title-wrapper')) {
+  applied = false;
+  }
+  if (applied) return;
+
+  var el = document.querySelector('h1.ant-typography');
+  if (!el) return;
+
+  if (document.getElementById('tms-title-wrapper')) return;
+
+  applied = true;
+
+  var wrapper = document.createElement('div');
+  wrapper.id = 'tms-title-wrapper';
+  wrapper.style.cssText =
+  'position:relative;' +
+  'padding:3px;' +
+  'border-radius:14px;' +
+  'background:linear-gradient(to right,#003366,#008C99,#D1C300,#D4AF37);' +
+  'margin:10px 0;' +
+  'box-shadow:0 6px 24px rgba(0,51,102,.18);';
+
+  var inner = document.createElement('div');
+  inner.style.cssText =
+  'background:#fff;' +
+  'border-radius:12px;' +
+  'padding:14px 18px;';
+
+  el.style.cssText =
+  'background:linear-gradient(to right,#003366,#008C99,#D1C300,#D4AF37);' +
+  '-webkit-background-clip:text;' +
+  '-webkit-text-fill-color:transparent;' +
+  'background-clip:text;' +
+  'font-size:1.15rem;' +
+  'font-weight:800;' +
+  'line-height:1.45;' +
+  'margin:0;' +
+  'padding:0;' +
+  'display:block;';
+
+  el.parentNode.insertBefore(wrapper, el);
+  wrapper.appendChild(inner);
+
+  var badge = document.createElement('div');
+  badge.style.cssText =
+  'display:inline-flex;' +
+  'align-items:center;' +
+  'gap:6px;' +
+  'background:linear-gradient(to right,#003366,#008C99);' +
+  'color:#fff;' +
+  'font-size:10.5px;' +
+  'font-weight:700;' +
+  'letter-spacing:.05em;' +
+  'text-transform:uppercase;' +
+  'padding:4px 10px;' +
+  'border-radius:999px;' +
+  'margin-bottom:8px;';
+  badge.innerHTML = '&#x2605; {{BRAND_NAME}} &nbsp;&#xB7;&nbsp; Ch&#xED;nh h&#xE3;ng';
+
+  inner.appendChild(badge);
+  inner.appendChild(el);
+
+  var line = document.createElement('div');
+  line.style.cssText =
+  'height:2px;' +
+  'border-radius:999px;' +
+  'background:linear-gradient(to right,#003366,#008C99,#D1C300,#D4AF37);' +
+  'margin-top:10px;' +
+  'opacity:.6;';
+  inner.appendChild(line);
+  }
+
+  function onUrlChange() {
+  applied = false;
+  setTimeout(styleTitle, 300);
+  setTimeout(styleTitle, 800);
+  setTimeout(styleTitle, 1800);
+  }
+
+  var _push = history.pushState;
+  var _replace = history.replaceState;
+
+  history.pushState = function () {
+  _push.apply(this, arguments);
+  onUrlChange();
+  };
+  history.replaceState = function () {
+  _replace.apply(this, arguments);
+  onUrlChange();
+  };
+
+  window.addEventListener('popstate', onUrlChange);
+
+  var observer = new MutationObserver(function () {
+  if (!applied || !document.getElementById('tms-title-wrapper')) {
+  applied = false;
+  styleTitle();
+  }
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
+
+  if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function () {
+  setTimeout(styleTitle, 300);
+  setTimeout(styleTitle, 800);
+  setTimeout(styleTitle, 2000);
+  });
+  } else {
+  setTimeout(styleTitle, 300);
+  setTimeout(styleTitle, 800);
+  setTimeout(styleTitle, 2000);
+  }
+})();
+</script>
+
+
+
+
+
+<script>
+(function(){
+  var SHOW_DUR=5000,DELAY_SECOND=60000,manualClose=false,isMobile=window.innerWidth<768;
+  var messages=[
+  "N\u1ebfu \u0111\u0103ng nh\u1eadp r\u1ed3i th\u1ea5y gi\u00e1 r\u1ebb qu\u00e1 \u2013 h\u00e3y t\xecm s\u1ea3n ph\u1ea9m kh\u00e1c \u0111i anh em!",
+  "H\xe3y g\xf5 v\xe0o \u0111\xe2y \u2013 {{BRAND_NAME}} ship t\u1eadn gi\u01b0\u1eddng cho anh em \ud83d\ude9a",
+  "Anh em \u0111\u0103ng nh\u1eadp r\u1ed3i \u2013 gi\u00e1 \u0111ang hi\u1ec3n th\u1ecb r\u1ebb l\u1eafm, t\xecm th\xeam \u0111i!",
+  "G\xf5 t\xecm s\u1ea3n ph\u1ea9m \u2013 {{BRAND_NAME}} giao h\xe0ng t\u1eadn n\u01a1i cho anh em \ud83d\udce6"
+  ];
+  var msgIndex=0,typeTimer=null,fakePH=null;
+
+  function getInput(){return document.querySelector('.ant-input-search input.ant-input')||document.querySelector('.ant-input-search input.ant-input-lg')||document.querySelector('input[type="search"]');}
+  function getWrap(){return document.querySelector('.ant-input-search')||document.querySelector('.ant-input-search-with-button');}
+
+  function typeText(el,text,cb){
+  var i=0;el.innerHTML='';clearInterval(typeTimer);
+  typeTimer=setInterval(function(){
+  if(i<text.length){el.innerHTML=text.slice(0,++i)+'<span class="jj-cursor"></span>';}
+  else{clearInterval(typeTimer);setTimeout(function(){if(cb)cb();},2000);}
+  },55);
+  }
+  function erasText(el,cb){
+  var text=(el.textContent||'');var i=text.length;clearInterval(typeTimer);
+  typeTimer=setInterval(function(){
+  if(i>0){el.innerHTML=text.slice(0,--i)+'<span class="jj-cursor"></span>';}
+  else{clearInterval(typeTimer);if(cb)cb();}
+  },28);
+  }
+
+  function cyclePlaceholder(){
+  var input=getInput();
+  if(!input||document.activeElement===input){setTimeout(cyclePlaceholder,1500);return;}
+  var wrap=input.closest('.ant-input-affix-wrapper')||input.parentElement;
+  if(!wrap){setTimeout(cyclePlaceholder,500);return;}
+  if(!fakePH){
+  wrap.style.position='relative';
+  fakePH=document.createElement('div');fakePH.id='jj-fake-placeholder';wrap.appendChild(fakePH);
+  var origPH=input.placeholder;input.placeholder='';
+  input.addEventListener('focus',function(){if(fakePH)fakePH.style.display='none';input.placeholder=origPH;});
+  input.addEventListener('blur',function(){if(!input.value){fakePH.style.display='';input.placeholder='';}});
+  }
+  var txt=messages[msgIndex%messages.length];msgIndex++;
+  typeText(fakePH,txt,function(){erasText(fakePH,function(){setTimeout(cyclePlaceholder,300);});});
+  }
+
+  function startPlaceholder(){var input=getInput();if(!input){setTimeout(startPlaceholder,400);return;}cyclePlaceholder();}
+
+  var inlineMsg=document.createElement('div');inlineMsg.id='junjin-inline-msg';
+  inlineMsg.innerHTML='<div class="jj-msg-inner"><span class="jj-msg-emoji">&#x1F4AC;</span><span><strong>Anh em</strong>, {{BRAND_NAME}} c\u00f3 r\u1ea5t nhi\u1ec1u s\u1ea3n ph\u1ea9m c\xf4ng ngh\u1ec7, gia d\u1ee5ng <span class="jj-msg-hl">r\u1ebb h\u01a1n Shopee</span> \u2013 h\xe3y th\u1eed t\xecm ki\u1ebfm! &#x1F50D;</span><button class="jj-msg-close" id="jj-close-btn">&#x2715;</button></div>';
+
+  function attachBanner(){var wrap=getWrap();if(!wrap){setTimeout(attachBanner,500);return;}wrap.style.position='relative';wrap.appendChild(inlineMsg);var btn=document.getElementById('jj-close-btn');if(btn)btn.addEventListener('click',function(){hideBanner();manualClose=true;});}
+  function showBanner(){if(manualClose||isMobile)return;inlineMsg.className+=' jj-msg-show';}
+  function hideBanner(){inlineMsg.className=inlineMsg.className.replace(' jj-msg-show','');}
+
+  function addMobileGlow(){
+  var icon=document.querySelector('.lucide-search')||document.querySelector('svg[class*="lucide-search"]');
+  if(!icon||icon.closest('.junjin-search-wrap'))return;
+  var w=document.createElement('span');w.className='junjin-search-wrap';
+  icon.parentNode.insertBefore(w,icon);w.appendChild(icon);
+  }
+
+  if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',function(){startPlaceholder();if(!isMobile)attachBanner();addMobileGlow();});
+  } else {
+  startPlaceholder();if(!isMobile)setTimeout(attachBanner,300);addMobileGlow();
+  }
+
+  setTimeout(function(){
+  if(manualClose||isMobile)return;showBanner();
+  setTimeout(function(){hideBanner();setTimeout(function(){if(manualClose)return;showBanner();setTimeout(hideBanner,SHOW_DUR);},DELAY_SECOND);},SHOW_DUR);
+  },40000);
+
+  window.addEventListener('resize',function(){isMobile=window.innerWidth<768;});
+})();
+</script>
+
+<script>
+(function() {
+
+  var DONE = false;
+
+  function hookHistory(fn) {
+  var oP = history.pushState;
+  var oR = history.replaceState;
+  history.pushState = function() { oP.apply(history, arguments); fn(); };
+  history.replaceState = function() { oR.apply(history, arguments); fn(); };
+  window.addEventListener('popstate', fn);
+  }
+
+  function onNavChange() {
+  DONE = false;
+  var old = document.getElementById('dx-ln-outer');
+  if (old) old.remove();
+  setTimeout(tryRun, 350);
+  }
+
+  function isLoginPage() {
+  return window.location.href.indexOf('dang-nhap') !== -1;
+  }
+
+  function anNutGooglDuoi() {
+  if (!isLoginPage()) return;
+  var divs = document.querySelectorAll('div.flex.flex-col.items-center');
+  for (var i = 0; i < divs.length; i++) {
+  var btn = divs[i].querySelector('button');
+  if (btn && (btn.textContent || '').indexOf('Google') !== -1) {
+  divs[i].style.setProperty('display', 'none', 'important');
+  }
+  }
+  var allEls = document.querySelectorAll('*');
+  for (var j = 0; j < allEls.length; j++) {
+  var el = allEls[j];
+  if (el.children.length > 0) continue;
+  var txt = (el.innerText || el.textContent || '').trim();
+  if (txt === 'ho\u1eb7c') {
+  el.style.setProperty('display', 'none', 'important');
+  if (el.parentNode) el.parentNode.style.setProperty('display', 'none', 'important');
+  }
+  }
+  }
+
+  function chenStepsVaoCard() {
+  if (document.getElementById('dx-ln-steps')) return;
+  var card = document.querySelector('.ant-card.ant-card-bordered.ant-card-small');
+  if (!card) return;
+  var target = null;
+  var allEls = card.querySelectorAll('*');
+  for (var i = 0; i < allEls.length; i++) {
+  var t = (allEls[i].innerText || allEls[i].textContent || '').trim();
+  if (t.indexOf('ho\u1eb7c \u0111\u0103ng nh\u1eadp b\u1eb1ng t\xe0i kho\u1ea3n') !== -1) {
+  target = allEls[i]; break;
+  }
+  }
+  var steps = document.createElement('div');
+  steps.id = 'dx-ln-steps';
+  steps.innerHTML =
+  '<div class="dx-step"><div class="snum">1</div><p>Nh\u1eadp t\xe0i kho\u1ea3n<br>ho\u1eb7c Email</p></div>' +
+  '<div class="dx-step"><div class="snum">2</div><p>Nh\u1eadp m\u1eadt kh\u1ea9u<br>\u0111\u0103ng nh\u1eadp</p></div>' +
+  '<div class="dx-step"><div class="snum">3</div><p>Xem gi\xe1 s\u1ed1c<br>& mua h\xe0ng!</p></div>';
+  steps.style.cssText = 'display:flex;gap:8px;padding:12px 0 4px;';
+  if (target && target.parentNode) {
+  target.parentNode.insertBefore(steps, target.nextSibling);
+  } else {
+  var cardBody = card.querySelector('.ant-card-body');
+  if (cardBody) cardBody.insertBefore(steps, cardBody.firstChild);
+  }
+  }
+
+  function tryRun() {
+  if (!isLoginPage()) return;
+  if (DONE) return;
+  var card = document.querySelector('.ant-card.ant-card-bordered.ant-card-small');
+  if (!card) { setTimeout(tryRun, 250); return; }
+  DONE = true;
+  inject(card);
+  setTimeout(anNutGooglDuoi,  500);  setTimeout(anNutGooglDuoi,  1200);  setTimeout(anNutGooglDuoi,  2500);
+  setTimeout(chenStepsVaoCard, 600); setTimeout(chenStepsVaoCard, 1400); setTimeout(chenStepsVaoCard, 2600);
+  }
+
+  function inject(card) {
+  if (document.getElementById('dx-ln-outer')) return;
+
+  if (!document.getElementById('dx-ln-css')) {
+  var s = document.createElement('style');
+  s.id = 'dx-ln-css';
+  s.textContent = ''
+  + '#dx-ln-outer{border-radius:18px;box-shadow:0 8px 40px rgba(45,122,31,.2),0 2px 8px rgba(0,0,0,.06);overflow:hidden;animation:dx-slide-in .4s cubic-bezier(.34,1.56,.64,1) both;}'
+  + '@keyframes dx-slide-in{0%{opacity:0;transform:translateY(20px) scale(.97)}100%{opacity:1;transform:translateY(0) scale(1)}}'
+  + '#dx-ln-hero{background:linear-gradient(160deg,#2d7a1f 0%,#3fa82f 40%,#85c756 100%);border-radius:16px 16px 0 0;padding:28px 24px 24px;position:relative;overflow:hidden;}'
+  + '#dx-ln-hero::before{content:"";position:absolute;top:-30px;right:-30px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.07);}'
+  + '#dx-ln-hero::after{content:"";position:absolute;bottom:-50px;left:-20px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.05);}'
+  + '#dx-ln-logo-row{display:flex;align-items:center;gap:12px;margin-bottom:18px;position:relative;z-index:1;}'
+  + '#dx-ln-logo-icon{width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.2);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;box-shadow:0 2px 12px rgba(0,0,0,.15);}'
+  + '#dx-ln-logo-text h1{margin:0;font-size:20px;font-weight:700;color:#fff;letter-spacing:-.3px;line-height:1.2;}'
+  + '#dx-ln-welcome{position:relative;z-index:1;}'
+  + '#dx-ln-notice{display:flex;align-items:flex-start;gap:10px;background:rgba(255,255,255,.15);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.25);border-radius:12px;padding:12px 14px;position:relative;z-index:1;}'
+  + '#dx-ln-notice .nx-icon{font-size:20px;flex-shrink:0;margin-top:1px;}'
+  + '#dx-ln-notice h2{margin:0;font-size:13.5px;font-weight:500;color:#fff;line-height:1.55;}'
+  + '.dx-dot{position:absolute;border-radius:50%;background:rgba(255,255,255,.12);pointer-events:none;animation:dx-pulse-dot 3s ease-in-out infinite;}'
+  + '@keyframes dx-pulse-dot{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.3);opacity:.2}}'
+  + '#dx-ln-body{background:#fff;border-radius:0 0 16px 16px;padding:0;}'
+  + '#dx-ln-steps{display:flex;gap:8px;}'
+  + '.dx-step{flex:1;background:#f0fdf4;border:1px solid #d1fae5;border-radius:10px;padding:10px 8px;text-align:center;}'
+  + '.dx-step .snum{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#85c756;color:#fff;font-size:12px;font-weight:700;margin-bottom:5px;}'
+  + '.dx-step p{margin:0;font-size:11.5px;color:#374151;font-weight:500;line-height:1.4;}'
+  + '.ant-btn-primary,.ant-btn-color-primary{box-shadow:0 4px 16px rgba(133,199,86,.45)!important;transition:transform .15s,box-shadow .15s!important;}'
+  + '.ant-btn-primary:hover,.ant-btn-color-primary:hover{transform:translateY(-2px)!important;box-shadow:0 8px 24px rgba(133,199,86,.55)!important;}'
+  + '.ant-input:focus,.ant-input-focused{border-color:#85c756!important;box-shadow:0 0 0 3px rgba(133,199,86,.2)!important;}';
+  document.head.appendChild(s);
+  }
+
+  var outer = document.createElement('div');
+  outer.id = 'dx-ln-outer';
+
+  var hero = document.createElement('div');
+  hero.id = 'dx-ln-hero';
+
+  [{w:80,h:80,t:'10px',r:'80px',delay:'0s'},{w:50,h:50,t:'60px',r:'20px',delay:'1s'},{w:30,h:30,b:'20px',l:'60px',delay:'.5s'}]
+  .forEach(function(d) {
+  var dot = document.createElement('div');
+  dot.className = 'dx-dot';
+  dot.style.width = d.w+'px'; dot.style.height = d.h+'px';
+  if (d.t) dot.style.top = d.t; if (d.r) dot.style.right = d.r;
+  if (d.b) dot.style.bottom = d.b; if (d.l) dot.style.left = d.l;
+  dot.style.animationDelay = d.delay;
+  hero.appendChild(dot);
+  });
+
+  hero.innerHTML += ''
+  + '<div id="dx-ln-logo-row">'
+  +   '<div id="dx-ln-logo-icon">\uD83D\uDECD\uFE0F</div>'
+  +   '<div id="dx-ln-logo-text"><h1>{{BRAND_NAME}}</h1></div>'
+  + '</div>'
+  + '<div id="dx-ln-welcome">'
+  +   '<div id="dx-ln-notice">'
+  +  '<span class="nx-icon">\uD83D\uDCCB</span>'
+  +  '<h2>Ch\xe0o anh em! Ch\u1ec9 c\u1ea7n b\u1ea5m v\xe0o n\xfat \u0111\u0103ng nh\u1eadp b\u1eb1ng Google l\xe0 xong, anh em \u0111\xe3 s\u1eed d\u1ee5ng v\xe0 th\u1ea5y \u0111\u01b0\u1ee3c gi\xe1 s\u1ea3n ph\u1ea9m ngay</h2>'
+  +   '</div>'
+  + '</div>';
+
+  var body = document.createElement('div');
+  body.id = 'dx-ln-body';
+
+  outer.appendChild(hero);
+  outer.appendChild(body);
+
+  card.parentNode.insertBefore(outer, card);
+  body.appendChild(card);
+
+  card.style.border = 'none';
+  card.style.boxShadow = 'none';
+  card.style.borderRadius = '0';
+  }
+
+  hookHistory(onNavChange);
+
+  function kickoff() {
+  var tries = 0;
+  var t = setInterval(function() {
+  if (!isLoginPage()) { clearInterval(t); return; }
+  var card = document.querySelector('.ant-card.ant-card-bordered.ant-card-small');
+  if (card) {
+  clearInterval(t); DONE = true; inject(card);
+  setTimeout(anNutGooglDuoi,   500);  setTimeout(anNutGooglDuoi,   1200);  setTimeout(anNutGooglDuoi,   2500);
+  setTimeout(chenStepsVaoCard, 600);  setTimeout(chenStepsVaoCard, 1400);  setTimeout(chenStepsVaoCard, 2600);
+  return;
+  }
+  if (++tries > 30) clearInterval(t);
+  }, 200);
+  }
+
+  kickoff();
+
+})();
+</script>
+
+<script>
+(function () {
+  var BLOCK_ID = 'jj-shipping-trust-block';
+
+  function formatDate(d) {
+  var months = ['Th01','Th02','Th03','Th04','Th05','Th06',
+  'Th07','Th08','Th09','Th10','Th11','Th12'];
+  return d.getDate() + ' ' + months[d.getMonth()];
+  }
+
+  function getDateRange() {
+  var now = new Date();
+  var d1 = new Date(now); d1.setDate(now.getDate() + 1);
+  var d2 = new Date(now); d2.setDate(now.getDate() + 4);
+  return 'Nh&#7853;n t&#7915; ' + formatDate(d1) + ' - ' + formatDate(d2);
+  }
+
+  function injectCSS() {
+  if (document.getElementById('jj-stb-css')) return;
+  var s = document.createElement('style');
+  s.id = 'jj-stb-css';
+  s.textContent =
+  '#jj-shipping-trust-block{font-family:"Segoe UI",Arial,sans-serif;margin:0;padding:0;position:relative}'
+  + '#jj-shipping-trust-block .jj-row{display:flex;align-items:flex-start;padding:10px 0;border-top:1px solid #f0f0f0;gap:12px}'
+  + '#jj-shipping-trust-block .jj-label{min-width:110px;max-width:110px;font-size:13px;color:#6b7280;line-height:1.5;padding-top:1px;flex-shrink:0}'
+  + '#jj-shipping-trust-block .jj-value{display:flex;align-items:center;gap:7px;font-size:13.5px;color:#1a1a1a;font-weight:500;flex:1;flex-wrap:wrap}'
+  + '#jj-shipping-trust-block .jj-value svg{flex-shrink:0}'
+  + '#jj-shipping-trust-block .jj-arrow{margin-left:4px;color:#9ca3af;font-size:12px}'
+  + '#jj-shipping-trust-block .jj-return-trigger{display:flex;align-items:center;gap:7px;cursor:pointer;user-select:none;position:relative}'
+  + '#jj-shipping-trust-block .jj-chevron{margin-left:4px;color:#9ca3af;font-size:13px;transition:transform .2s}'
+  + '#jj-shipping-trust-block .jj-chevron.open{transform:rotate(180deg)}'
+
+  + '#jj-return-popup{display:none;position:absolute;top:28px;left:-130px;z-index:9999;background:#fff;border:1px solid #e5e7eb;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.12);padding:0;min-width:320px;max-width:380px;overflow:hidden}'
+  + '#jj-return-popup.visible{display:block}'
+
+  + '@media(max-width:640px){'
+  +   '#jj-return-popup{position:static !important;top:auto !important;left:auto !important;width:100%;max-width:100%;min-width:0;margin-top:10px;box-shadow:0 4px 16px rgba(0,0,0,.1);}'
+  +   '#jj-shipping-trust-block .jj-row:last-child{flex-wrap:wrap}'
+  +   '#jj-shipping-trust-block .jj-row:last-child .jj-value{flex:1 1 100%}'
+  + '}'
+
+  + '#jj-return-popup .jj-popup-header{padding:14px 16px 12px;border-bottom:1px solid #f0f0f0}'
+  + '#jj-return-popup .jj-popup-header h4{margin:0;font-size:14px;font-weight:700;color:#1a1a1a}'
+  + '#jj-return-popup .jj-popup-item{display:flex;gap:12px;padding:14px 16px;align-items:flex-start}'
+  + '#jj-return-popup .jj-popup-icon{flex-shrink:0;width:36px;height:36px;background:#fff3ef;border-radius:50%;display:flex;align-items:center;justify-content:center}'
+  + '#jj-return-popup .jj-popup-text h5{margin:0 0 5px 0;font-size:13.5px;font-weight:700;color:#1a1a1a}'
+  + '#jj-return-popup .jj-popup-text p{margin:0;font-size:12.5px;color:#6b7280;line-height:1.6}';
+  document.head.appendChild(s);
+  }
+
+  function buildBlock() {
+  var div = document.createElement('div');
+  div.id = BLOCK_ID;
+
+  div.innerHTML =
+  '<div class="jj-row">'
+  +   '<div class="jj-label">V&#7853;n Chuy&#7875;n</div>'
+  +   '<div class="jj-value">'
+  +  '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>'
+  +  '<span>' + getDateRange() + '</span>'
+  +  '<span class="jj-arrow">&#8250;</span>'
+  +   '</div>'
+  + '</div>'
+
+  + '<div class="jj-row">'
+  +   '<div class="jj-label">An T&#226;m Mua S&#7855;m C&#249;ng {{BRAND_NAME}}</div>'
+  +   '<div class="jj-value">'
+  +  '<div class="jj-return-trigger" id="jj-return-trigger">'
+  +  '<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>'
+  +  'Tr&#7843; h&#224;ng mi&#7877;n ph&#237; 7 ng&#224;y'
+  +  '<span class="jj-chevron" id="jj-chevron">&#8964;</span>'
+  +  '</div>'
+  +  '<div id="jj-return-popup">'
+  +  '<div class="jj-popup-header">'
+  +  '<h4>An t&#226;m mua s&#7855;m c&#249;ng {{BRAND_NAME}}</h4>'
+  +  '</div>'
+  +  '<div class="jj-popup-item">'
+  +  '<div class="jj-popup-icon">'
+  +  '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>'
+  +  '</div>'
+  +  '<div class="jj-popup-text">'
+  +  '<h5>Tr&#7843; h&#224;ng mi&#7877;n ph&#237; 7 ng&#224;y</h5>'
+  +  '<p>Mi&#7877;n ph&#237; Tr&#7843; h&#224;ng trong 7 ng&#224;y &#273;&#7875; &#273;&#7843;m b&#7843;o b&#7841;n ho&#224;n to&#224;n c&#243; th&#7875; y&#234;n t&#226;m khi mua h&#224;ng &#7903; {{BRAND_NAME}}.<br>Ngo&#224;i ra, t&#7841;i th&#7901;i &#273;i&#7875;m m&#7903; h&#224;ng, b&#7841;n vui l&#242;ng quay video n&#7871;u ph&#225;t sinh l&#7895;i s&#7869; &#273;&#432;&#7907;c tr&#7843; h&#224;ng mi&#7877;n ph&#237;, shop ch&#7883;u ship 2 chi&#7873;u.</p>'
+  +  '</div>'
+  +  '</div>'
+  +  '</div>'
+  +   '</div>'
+  + '</div>';
+
+  return div;
+  }
+
+  function attachToggle() {
+  var trigger = document.getElementById('jj-return-trigger');
+  var popup   = document.getElementById('jj-return-popup');
+  var chevron = document.getElementById('jj-chevron');
+  if (!trigger || !popup) return;
+
+  trigger.addEventListener('click', function (e) {
+  e.stopPropagation();
+  var open = popup.classList.toggle('visible');
+  if (chevron) chevron.classList.toggle('open', open);
+  });
+
+  document.addEventListener('click', function () {
+  popup.classList.remove('visible');
+  if (chevron) chevron.classList.remove('open');
+  });
+  }
+
+  function findTarget() {
+  var labels = document.querySelectorAll('label.ant-form-item-no-colon');
+  for (var i = 0; i < labels.length; i++) {
+  if (labels[i].textContent.trim() === 'SKU') {
+  var row = labels[i].closest('.ant-row.ant-form-item-row');
+  if (row) return row;
+  }
+  }
+  return null;
+  }
+
+  function inject() {
+  if (document.getElementById(BLOCK_ID)) return true;
+  var target = findTarget();
+  if (!target) return false;
+  injectCSS();
+  var block = buildBlock();
+  target.parentNode.insertBefore(block, target.nextSibling);
+  attachToggle();
+  return true;
+  }
+
+  function removeBlock() {
+  var old = document.getElementById(BLOCK_ID);
+  if (old && old.parentNode) old.parentNode.removeChild(old);
+  }
+
+  function tryInject() {
+  if (!inject()) {
+  var tries = 0;
+  var t = setInterval(function () {
+  if (inject() || ++tries > 30) clearInterval(t);
+  }, 300);
+  }
+  }
+
+  if (!window.__jjShipHooked) {
+  window.__jjShipHooked = true;
+  var _oP = history.pushState;
+  var _oR = history.replaceState;
+  history.pushState = function () {
+  _oP.apply(history, arguments);
+  setTimeout(function () { removeBlock(); tryInject(); }, 400);
+  };
+  history.replaceState = function () {
+  _oR.apply(history, arguments);
+  setTimeout(function () { removeBlock(); tryInject(); }, 400);
+  };
+  window.addEventListener('popstate', function () {
+  setTimeout(function () { removeBlock(); tryInject(); }, 400);
+  });
+  }
+
+  tryInject();
+})();
+</script>
+<script>
+(function(){
+  var HO=['Nguyễn','Trần','Lê','Phạm','Hoàng','Huỳnh','Phan','Vũ','Võ','Đặng','Bùi','Đỗ','Hồ','Ngô','Dương','Lý','Đinh','Lâm','Mai','Cao'];
+  var TEN=['Anh','Lan','Hoa','Mai','Linh','Hương','Thảo','Ngọc','Trang','Yến','Hà','Thu','Nhung','Vân','Quỳnh','Phương','Nam','Tuấn','Hùng','Minh','Đức','Khoa','Long','Bình','Dũng','Tú','Phát','Quang','Thành','Hải','Dung','Hiền','Lâm','Tâm','Trung','Phúc','Khánh','Bảo','Vy','Nhi','Tiên','Giang','Lộc','Thiện','Khang'];
+  var TINH=['Hà Nội','TP.HCM','Đà Nẵng','Hải Phòng','Cần Thơ','An Giang','Bà Rịa–Vũng Tàu','Bắc Giang','Bắc Ninh','Bến Tre','Bình Định','Bình Dương','Đồng Nai','Gia Lai','Khánh Hòa','Kiên Giang','Lâm Đồng','Long An','Nam Định','Nghệ An','Ninh Bình','Phú Thọ','Quảng Nam','Quảng Ninh','Thanh Hóa','Thừa Thiên Huế','Tiền Giang','Vĩnh Long','Vĩnh Phúc','Yên Bái','Hà Tĩnh','Bình Phước','Đắk Lắk','Tây Ninh','Bạc Liêu','Cà Mau','Hà Giang','Lào Cai','Sơn La','Quảng Bình'];
+  var SP=[
+  {icon:'🤖',ten:'Máy hút bụi & lau sàn Xiaomi Deerma MOVA X40 Plus'},
+  {icon:'🤖',ten:'Máy lau nhà Deerma MOVA X40 Plus nước nóng 90°C'},
+  {icon:'🤖',ten:'Deerma MOVA X40 Plus - tự sấy giẻ lau 25.000Pa'},
+  {icon:'💡',ten:'Đèn bàn Syrinx JW5512 cảm biến vẫy tay CRI≥90'},
+  {icon:'💧',ten:'Máy hút ẩm Xiaomi WIDETECH 30L kết nối Mihome'},
+  {icon:'💧',ten:'Máy hút ẩm MYTEM Rooming Dehumidifier 300ml'},
+  {icon:'💧',ten:'Máy Hút Ẩm Xiaomi VINO 16L cảm ứng thông minh'},
+  {icon:'💧',ten:'Hút ẩm Xiaomi Vino 20L kết nối app Mihome'},
+  {icon:'📷',ten:'Camera hành trình 70Mai M310'},
+  {icon:'🗺️',ten:'Phần mềm Vietmap Live Pro dẫn đường ô tô 1 năm'},
+  {icon:'⚡',ten:'Củ sạc nhanh 20W Aukey Omnia USB-C PD PA-B1'},
+  {icon:'🪑',ten:'Ghế ô tô trẻ em POPMAX HOORAY xoay 360° iSOFIX'},
+  {icon:'🔊',ten:'Loa Bluetooth JBL BassPro Go loa siêu trầm'},
+  {icon:'📱',ten:'Kính cường lực iPhone Full màn MKING Pro Max'},
+  {icon:'⌚',ten:'Đồng hồ thông minh Xiaomi 70mai Maimo Watch R'},
+  {icon:'⚡',ten:'Củ sạc nhanh 30W Anker Zolo A2698 USB-C'},
+  {icon:'🔌',ten:'Ổ điện thông minh Wi-Fi DELIXI cổng C 20W'},
+  {icon:'🎧',ten:'Tai nghe Bluetooth Monster Maxstar MQO33 Gaming'},
+  {icon:'⚡',ten:'Sạc dự phòng 20.000mAh GaN siêu mỏng'},
+  {icon:'📱',ten:'Cáp sạc nhanh 65W bện dù chính hãng'}
+  ];
+  var PHUT=[1,2,3,4,5,6,7,8,9,10,11,12,14,15,17,18,20,22,25,30];
+
+  function r(a){return a[Math.floor(Math.random()*a.length)];}
+  function data(){var sp=r(SP);return{icon:sp.icon,ten:r(HO)+' '+r(TEN)[0]+'.',tinh:r(TINH),sp:sp.ten,phut:r(PHUT)};}
+
+  var s=document.createElement('style');
+  s.textContent='@keyframes ppSlideUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}@keyframes ppSlideDown{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(14px)}}#pp-sp-wrap{animation:ppSlideUp .38s cubic-bezier(.34,1.1,.64,1) both}#pp-sp-wrap.hide{animation:ppSlideDown .28s ease forwards}';
+  document.head.appendChild(s);
+
+  var wrap=document.createElement('div');
+  wrap.id='pp-sp-wrap';
+  Object.assign(wrap.style,{position:'fixed',bottom:'66px',left:'51px',zIndex:'999998',maxWidth:'320px',width:'calc(100vw - 40px)',fontFamily:'Inter,system-ui,-apple-system,sans-serif'});
+
+  function render(d){
+  wrap.innerHTML=
+  '<div style="background:#fff;border-radius:14px;padding:12px 14px 10px;box-shadow:0 4px 24px rgba(0,0,0,.13),0 1px 4px rgba(0,0,0,.08);display:flex;align-items:flex-start;gap:10px;position:relative;border:1px solid rgba(0,0,0,.06);">'+
+  '<div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#edfce0,#d4f5be);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:0 2px 6px rgba(102,186,50,.18);">'+d.icon+'</div>'+
+  '<div style="flex:1;min-width:0;">'+
+  '<div style="font-size:13px;color:#1a1a1a;line-height:1.5;"><strong style="color:#111;">'+d.ten+'</strong> <span style="color:#555;">('+d.tinh+')</span> vừa mua <strong style="color:#3a7d0e;">'+d.sp+'</strong> giá ưu đãi</div>'+
+  '<div style="margin-top:5px;display:flex;align-items:center;gap:6px;">'+
+  '<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#66ba32;flex-shrink:0;"></span>'+
+  '<span style="font-size:11.5px;color:#888;">'+d.phut+' phút trước</span>'+
+  '<span style="margin-left:auto;background:#f0fbe8;border:1px solid rgba(102,186,50,.25);border-radius:999px;padding:1px 8px;font-size:10.5px;font-weight:700;color:#4f9823;">{{BRAND_NAME}}</span>'+
+  '</div>'+
+  '</div>'+
+  '<button onclick="document.getElementById(\'pp-sp-wrap\').remove()" style="position:absolute;top:6px;right:8px;background:none;border:none;cursor:pointer;color:#bbb;font-size:14px;line-height:1;padding:2px 4px;">×</button>'+
+  '</div>';
+  }
+
+  var SHOW_DUR = 3000;
+  var OUT  = 400;
+  var GAPS  = [10000, 30000, 40000];
+  var gapIdx   = 0;
+
+  function showNext(){
+  if(!document.body.contains(wrap)) document.body.appendChild(wrap);
+  wrap.classList.remove('hide');
+  void wrap.offsetWidth;
+  render(data());
+
+  setTimeout(function(){
+  wrap.classList.add('hide');
+
+  var gap = GAPS[gapIdx % GAPS.length];
+  gapIdx++;
+
+  setTimeout(showNext, OUT + gap);
+  }, SHOW_DUR);
+  }
+
+  setTimeout(showNext, 10000);
+})();
+</script>
+
+
+
+
+
+
+<script>
+(function() {
+
+  var REVIEWS = [
+  { user:'tranminhtu98',  stars:5, date:'2026-03-18 09:24', text:'Đăng nhập xong thấy nhiều sản phẩm giá rẻ thật sự, rẻ hơn cả Shopee mà hàng vẫn xịn. Mua thêm mấy cái nữa rồi.', likes:12 },
+  { user:'nguyenvanan_hcm',  stars:5, date:'2026-03-15 14:37', text:'Thanh toán COD tiện lắm, không cần thẻ vẫn mua được. Hàng giao nhanh hơn tôi nghĩ, đóng gói chắc chắn.', likes:8, reply:'Cảm ơn anh đã tin tưởng shop ạ! Anh có nhu cầu gì cứ nhắn nhé 🙏' },
+  { user:'hoangphuoc_bmt',   stars:5, date:'2026-03-12 21:05', text:'Đăng ký hơi mất công tí xíu nhưng xong rồi ổn, giá sản phẩm nào cũng ngon hết. Sẽ mua tiếp.', likes:5 },
+  { user:'levan_longg',  stars:5, date:'2026-03-10 08:11', text:'Xịn thật! Mua về dùng rất phê. Chất lượng không chê vào đâu được, không cần mang theo dây riêng.', likes:15, reply:'Shop cảm ơn anh đã review chi tiết ạ! Anh em ghé shop thường xuyên nhé 😊' },
+  { user:'phamthithu_dn',  stars:5, date:'2026-03-08 16:50', text:'Mới đăng ký lần đầu thấy shop có nhiều deal hay, giá gốc rõ ràng không lăng nhăng. Tin tưởng mua được.', likes:6 },
+  { user:'quocbao_2k3',  stars:5, date:'2026-03-06 20:30', text:'Hàng xịn thật, y hình, giao đúng hẹn. Giá tốt, chất lượng không có gì chê. Shop hơi chậm trả lời nhưng hàng ổn là được.', likes:3 },
+  { user:'mylinh.shop',  stars:5, date:'2026-03-04 11:15', text:'Mình mua để kinh doanh, nhập lô 10 cái giá ngon vl. Rẻ hơn mấy chỗ khác cả trăm nghìn/cái. Đặt thêm tuần sau.', likes:20 },
+  { user:'trantanphat99',  stars:5, date:'2026-03-01 18:44', text:'Hàng chính hãng thật, tem nhãn đàng hoàng. Đã mua 3 lần rồi lần nào cũng ok. Shop tư vấn nhiệt tình nữa.', likes:11 },
+  { user:'namphuongbui',  stars:5, date:'2026-02-27 10:22', text:'Hàng tốt, giá rẻ hơn Tiki Shopee kha khá. COD thanh toán tiện không cần thẻ. Shop hơi chậm reply nhưng hàng đủ nét rồi.', likes:7 },
+  { user:'khanhlinh2025',  stars:5, date:'2026-02-24 15:03', text:'Sản phẩm chất lượng, dùng thấy phê thật. Bao bì đẹp, giá lại mềm. Recommend mạnh cho ae chưa biết shop này.', likes:18, reply:'Shop cảm ơn chị ủng hộ nhiệt tình ạ! Hẹn gặp lại chị lần sau 💚' },
+  ];
+
+  var _fn = ['nguyen','tran','le','pham','hoang','vo','dang','bui','do','ngo','duong','ly','dinh','truong'];
+  var _mn = ['van','thi','thanh','minh','quoc','huu','duc','kim','thu','hong','bich','anh','lan','hai'];
+  var _ln = ['an','hung','nam','linh','long','phat','thu','hoa','tuan','manh','dat','hai','son','khoa','khanh','vy','nhi','bao','cuong','dung'];
+  var _sfx = ['88','99','2k','2k1','2k2','2k3','_hn','_hcm','_dn','_ct','98','97','96','_sg','2025','2024','123','_vn'];
+
+  var TEXTS5 = [
+  'Shop uy tín, hàng chất lượng, giao nhanh. Sẽ mua lại lần sau!',
+  'Đặt hàng dễ dàng, thanh toán COD tiện. Hàng y như mô tả, rất hài lòng.',
+  'Giá tốt, hàng xịn. Shop hơi chậm trả lời nhưng hàng ổn nên thôi.',
+  'Hàng tốt lắm, chất lượng không có gì chê. Shop reply hơi chậm nhưng hàng đủ nét.',
+  'Mua lần đầu đã thấy ưng, chất lượng vượt kỳ vọng so với giá tiền.',
+  'Shop tư vấn nhiệt tình, hàng về đúng hẹn, đóng gói rất cẩn thận.',
+  'Rất hài lòng! Hàng đẹp đúng mô tả, giao hàng siêu nhanh luôn.',
+  'Hàng xịn thật sự, dùng thấy phê. Shop nhắn hơi chậm nhưng hàng tốt bù lại.',
+  'Chất lượng tốt, giá hợp lý. Sẽ ủng hộ shop dài dài không đổi shop.',
+  'Shop phản hồi có hơi chậm, nhưng hàng đúng mô tả, chất lượng ổn. 5 sao xứng đáng!',
+  'Hàng về nhanh, đóng gói cẩn thận. Shop trả lời tin nhắn hơi lâu nhưng hàng tốt.',
+  'Sản phẩm chất lượng, giá rẻ hơn ngoài thị trường. Recommend mạnh cho ae!',
+  'Mua để kinh doanh, giá nhập ngon. Hàng xịn, shop hơi chậm nhưng chấp nhận được.',
+  'Hàng y hình, chính hãng, đóng gói chắc. Sẽ tiếp tục ủng hộ shop.',
+  ];
+
+  function rInt(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+  function rItem(arr) { return arr[rInt(0, arr.length - 1)]; }
+
+  function genName() {
+  var name = rItem(_fn);
+  if (Math.random() > 0.35) name += rItem(_mn);
+  name += rItem(_ln);
+  if (Math.random() > 0.45) name += rItem(_sfx);
+  return name;
+  }
+
+  function genDate(idx, total) {
+  var start = new Date('2025-01-01').getTime();
+  var end   = new Date('2026-03-15').getTime();
+  var t = start + (end - start) * (1 - idx / total);
+  var d = new Date(t + rInt(-4, 4) * 86400000);
+  var p = function(n){ return n < 10 ? '0'+n : ''+n; };
+  return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(rInt(7,22))+':'+p(rInt(0,59));
+  }
+
+  function genStar() { return 5; }
+
+  var TARGET = 400;
+  var toGen = TARGET - REVIEWS.length;
+  for (var i = 0; i < toGen; i++) {
+  REVIEWS.push({
+  user:  genName(),
+  stars: genStar(),
+  date:  genDate(i, toGen),
+  text:  rItem(TEXTS5),
+  likes: rInt(0, 28)
+  });
+  }
+
+  REVIEWS.sort(function(a, b) { return a.date < b.date ? 1 : -1; });
+
+  var COLORS = ['#16a34a','#2563eb','#9333ea','#dc2626','#ea580c','#0891b2','#4f46e5','#be185d'];
+  var PAGE_SIZE = 3;
+  var currentShown = PAGE_SIZE;
+  var activeFilter = 0;
+
+  function initials(name) {
+  return name.replace(/[^a-zA-Z\u00C0-\u024F]/g,'').substring(0,2).toUpperCase() || 'U';
+  }
+
+  function stars(n, size) {
+  var sz = size || 16;
+  var s = '';
+  for (var i = 1; i <= 5; i++) {
+  s += '<span style="color:'+(i<=n?'#f59e0b':'#d1d5db')+';font-size:'+sz+'px">★</span>';
+  }
+  return s;
+  }
+
+  function starsFloat(n, size) {
+  var sz = size || 16;
+  var s = '';
+  var full = Math.floor(n);
+  var frac = n - full;
+  for (var i = 1; i <= 5; i++) {
+  if (i <= full) {
+  s += '<span style="color:#f59e0b;font-size:'+sz+'px">&#9733;</span>';
+  } else if (i === full + 1 && frac > 0) {
+  var pct = Math.round(frac * 100);
+  s += '<span style="font-size:'+sz+'px;background:linear-gradient(to right,#f59e0b '+pct+'%,#d1d5db '+pct+'%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">&#9733;</span>';
+  } else {
+  s += '<span style="color:#d1d5db;font-size:'+sz+'px">&#9733;</span>';
+  }
+  }
+  return s;
+  }
+
+  function countStars(n) {
+  return REVIEWS.filter(function(r){ return r.stars === n; }).length;
+  }
+
+  function getFiltered(filter) {
+  return REVIEWS.filter(function(r){ return filter === 0 || r.stars === filter; });
+  }
+
+  function renderItem(r, idx) {
+  var color = COLORS[idx % COLORS.length];
+  var daysSeed = (idx * 137 + 53) % 49 + 2;
+  var replyHtml = r.reply
+  ? '<div style="background:#f9fafb;border-left:3px solid #85c756;border-radius:6px;padding:10px 14px;margin-top:10px">'
+  + '<div style="font-size:12px;font-weight:700;color:#15803d;margin-bottom:4px">📢 Phản Hồi Của Người Bán</div>'
+  + '<div style="font-size:13px;color:#374151">' + r.reply + '</div>'
+  + '</div>'
+  : '';
+  return '<div class="dx-rv-item" style="padding:16px 0;border-bottom:1px solid #f3f4f6">'
+  + '<div style="display:flex;align-items:flex-start;gap:12px">'
+  +   '<div style="width:38px;height:38px;border-radius:50%;background:'+color+';flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff">'+initials(r.user)+'</div>'
+  +   '<div style="flex:1;min-width:0">'
+  +  '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:2px">'
+  +  '<span style="font-weight:600;font-size:14px;color:#1f2937">'+r.user+'</span>'
+  +  '<span style="display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;color:#15803d;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:999px;padding:1px 8px">'
+  +  '<svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="#15803d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+  +  'Đã mua tại {{SITE}}'
+  +  '</span>'
+  +  '</div>'
+  +  '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">'
+  +  '<div>'+stars(r.stars,16)+'</div>'
+  +  '<span style="display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;color:#e11d48;">'
+  +  '<svg width="10" height="10" viewBox="0 0 24 24" fill="#e11d48"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'
+  +  'Sẽ giới thiệu cho bạn bè, người thân'
+  +  '</span>'
+  +  '</div>'
+  +  '<div style="font-size:11.5px;color:#9ca3af;margin-bottom:8px">'+r.date+'</div>'
+  +  '<div style="font-size:14px;color:#374151;line-height:1.6">'+r.text+'</div>'
+  +  replyHtml
+  +  '<div style="margin-top:10px;display:flex;align-items:center;gap:6px">'
+  +  '<span style="font-size:12px;color:#9ca3af;cursor:pointer">👍 '+(r.likes||0)+'</span>'
+  +  '<span style="font-size:12px;color:#d1d5db;margin:0 4px">|</span>'
+  +  '<span style="font-size:12px;color:#9ca3af;cursor:pointer">Hữu ích?</span>'
+  +  '<span style="font-size:12px;color:#d1d5db;margin:0 4px">|</span>'
+  +  '<span style="font-size:12px;color:#6b7280">Đã dùng khoảng '+daysSeed+' ngày</span>'
+  +  '</div>'
+  +   '</div>'
+  + '</div>'
+  + '</div>';
+  }
+
+  function refreshList() {
+  var list = getFiltered(activeFilter);
+  var shown = list.slice(0, currentShown);
+  var html = '';
+  shown.forEach(function(r, idx){ html += renderItem(r, idx); });
+  document.getElementById('dx-rv-list').innerHTML = html;
+  var btnWrap = document.getElementById('dx-rv-more-wrap');
+  if (currentShown >= list.length) {
+  btnWrap.style.display = 'none';
+  } else {
+  btnWrap.style.display = 'flex';
+  document.getElementById('dx-rv-more-btn').textContent = 'Xem thêm đánh giá ('+(list.length - currentShown)+')';
+  }
+  }
+
+  function buildBlock() {
+  function _sRand(seed, min, max) {
+  var x = Math.sin(seed + 1) * 10000;
+  var r = x - Math.floor(x);
+  return Math.floor(r * (max - min + 1)) + min;
+  }
+  function _pSeed() {
+  var url = window.location.href;
+  var hash = 0;
+  for (var i = 0; i < url.length; i++) hash = url.charCodeAt(i) + ((hash << 5) - hash);
+  return Math.abs(hash);
+  }
+  var _seed = _pSeed();
+  var _starInt  = _sRand(_seed, 40, 50);
+  var _starAvg  = (_starInt / 10).toFixed(1);
+  var _buyCount   = _sRand(_seed + 2, 50, 400);
+  var _reviewPct  = _sRand(_seed + 1, 20, 70);
+  var _reviewCount = Math.floor(_buyCount * _reviewPct / 100);
+  if (_reviewCount < 5) _reviewCount = 5;
+
+  var _r = window._gtmRating || {};
+  var total = _r.reviews || _reviewCount;
+  if (REVIEWS.length > total) REVIEWS.splice(total);
+  var AVG_DISPLAY = (_r.avg || _starAvg).toString().replace('.', ',');
+  var c5 = countStars(5), c4 = countStars(4), c3 = countStars(3), c2 = countStars(2), c1 = countStars(1);
+
+  var block = document.createElement('div');
+  block.id = 'dx-fake-reviews';
+  block.style.cssText = 'background:#fff;border-radius:10px;padding:20px;margin-bottom:16px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;border:1px solid #e5e7eb';
+
+  block.innerHTML = ''
+  + '<div style="font-size:14px;font-weight:700;color:#111827;letter-spacing:.5px;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid #f3f4f6">ĐÁNH GIÁ SẢN PHẨM</div>'
+  + '<div style="display:flex;align-items:center;gap:20px;margin-bottom:16px;flex-wrap:wrap">'
+  +   '<div style="text-align:center">'
+  +  '<div style="font-size:48px;font-weight:800;color:#f59e0b;line-height:1">'+AVG_DISPLAY+'</div>'
+  +  '<div style="font-size:12px;color:#6b7280;margin-top:2px">trên 5</div>'
+  +  '<div style="margin-top:6px">'+starsFloat(parseFloat(_starAvg),20)+'</div>'
+  +  '<div style="font-size:12px;color:#6b7280;margin-top:4px">('+total+' đánh giá)</div>'
+  +   '</div>'
+  +   '<div id="dx-rv-filters" style="display:flex;flex-wrap:wrap;gap:6px">'
+  +  '<button class="dx-rv-tab dx-rv-active" data-f="0">Tất Cả ('+total+')</button>'
+  +  '<button class="dx-rv-tab" data-f="5">5 Sao ('+c5+')</button>'
+  +  (c4>0?'<button class="dx-rv-tab" data-f="4">4 Sao ('+c4+')</button>':'')
+  +  (c3>0?'<button class="dx-rv-tab" data-f="3">3 Sao ('+c3+')</button>':'')
+  +  (c2>0?'<button class="dx-rv-tab" data-f="2">2 Sao ('+c2+')</button>':'')
+  +  (c1>0?'<button class="dx-rv-tab" data-f="1">1 Sao ('+c1+')</button>':'')
+  +   '</div>'
+  + '</div>'
+  + '<div id="dx-rv-list"></div>'
+  + '<div id="dx-rv-more-wrap" style="display:flex;justify-content:center;margin-top:16px">'
+  +   '<button id="dx-rv-more-btn" style="background:#fff;border:1.5px solid #15803d;color:#15803d;border-radius:24px;padding:10px 28px;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s">Xem thêm đánh giá</button>'
+  + '</div>';
+
+  if (!document.getElementById('dx-rv-css')) {
+  var s = document.createElement('style');
+  s.id = 'dx-rv-css';
+  s.textContent = ''
+  + '.dx-rv-tab{background:#fff;border:1px solid #d1d5db;border-radius:20px;padding:5px 12px;font-size:12.5px;cursor:pointer;color:#374151;font-weight:500;transition:all .15s}'
+  + '.dx-rv-tab.dx-rv-active{background:#dc2626;border-color:#dc2626;color:#fff;font-weight:700}'
+  + '.dx-rv-tab:hover:not(.dx-rv-active){border-color:#85c756;color:#15803d}'
+  + '.dx-rv-item:last-child{border-bottom:none}'
+  + '#dx-rv-more-btn:hover{background:#15803d;color:#fff}';
+  document.head.appendChild(s);
+  }
+
+  setTimeout(function() {
+  refreshList();
+  var tabs = block.querySelectorAll('.dx-rv-tab');
+  tabs.forEach(function(tab) {
+  tab.addEventListener('click', function() {
+  tabs.forEach(function(t){ t.classList.remove('dx-rv-active'); });
+  tab.classList.add('dx-rv-active');
+  activeFilter = parseInt(tab.getAttribute('data-f'), 10);
+  currentShown = PAGE_SIZE;
+  refreshList();
+  });
+  });
+  var moreBtn = document.getElementById('dx-rv-more-btn');
+  if (moreBtn) {
+  moreBtn.addEventListener('click', function() {
+  currentShown += PAGE_SIZE;
+  refreshList();
+  });
+  }
+  }, 100);
+
+  return block;
+  }
+
+  function inject() {
+  if (document.getElementById('dx-fake-reviews')) return;
+  var target = document.querySelector('.mb-6.mt-4.border-b.bg-white');
+  if (!target) return false;
+  var block = buildBlock();
+  var nx = target.nextSibling;
+  nx ? target.parentNode.insertBefore(block, nx) : target.parentNode.appendChild(block);
+  return true;
+  }
+
+  var oP = history.pushState, oR = history.replaceState;
+  history.pushState  = function(){ oP.apply(history,arguments); setTimeout(tryInject,400); };
+  history.replaceState = function(){ oR.apply(history,arguments); setTimeout(tryInject,400); };
+  window.addEventListener('popstate', function(){ setTimeout(tryInject,400); });
+
+  function tryInject() {
+  var el = document.getElementById('dx-fake-reviews');
+  if (el) el.remove();
+  currentShown = PAGE_SIZE;
+  activeFilter = 0;
+  var tries = 0;
+  var t = setInterval(function() {
+  if (inject() || ++tries > 25) clearInterval(t);
+  }, 200);
+  }
+
+  tryInject();
+
+})();
+</script>
+
+
+
+<script>
+(function() {
+
+  var DONE = false;
+  var lastUrl = '';
+
+  var FIELDS = [
+  { keys: ['username','t\xe0i kho\u1ea3n','account'], placeholder: 'nguyenvana', icon: '\uD83D\uDC64', hint: 'Ch\u1ec9 ch\u1eef th\u01b0\u1eddng, s\u1ed1, d\u1ea5u g\u1ea1ch d\u01b0\u1edbi \u2014 kh\xf4ng d\u1ea5u, kh\xf4ng k\xfd t\u1ef1 \u0111\u1eb7c bi\u1ec7t', color: '#16a34a' },
+  { keys: ['name','h\u1ecd','fullname'], placeholder: 'Nguy\u1ec5n V\u0103n A', icon: '\uD83D\uDC4B', hint: 'H\u1ecd t\xean th\u1eadt \u0111\u1ec3 {{BRAND_NAME}} giao h\xe0ng ch\xednh x\xe1c', color: '#0ea5e9' },
+  { keys: ['phone','s\u1ed1 \u0111i\u1ec7n','mobile','tel'], placeholder: '0123 456 789', icon: '\uD83D\uDCF1', hint: '10 s\u1ed1, b\u1eaft \u0111\u1ea7u b\u1eb1ng 0 \u2014 d\xf9ng \u0111\u1ec3 li\xean h\u1ec7 giao h\xe0ng', color: '#f97316' },
+  { keys: ['email'], placeholder: 'nguyenvana@gmail.com', icon: '\u2709\uFE0F', hint: '\u0110\u1ec3 x\xe1c minh t\xe0i kho\u1ea3n v\xe0 nh\u1eadn th\xf4ng b\xe1o \u0111\u01a1n h\xe0ng', color: '#8b5cf6' },
+  { keys: ['password','m\u1eadt kh\u1ea9u','pass'], placeholder: 'matkhau@123456#', icon: '\uD83D\uDD12', hint: 'T\u1ed1i thi\u1ec3u 8 k\xfd t\u1ef1 \u2014 n\xean c\xf3 ch\u1eef hoa, s\u1ed1 v\xe0 k\xfd t\u1ef1 \u0111\u1eb7c bi\u1ec7t', color: '#ef4444' },
+  { keys: ['confirm','x\xe1c nh\u1eadn','repeat','retype'], placeholder: 'matkhau@123456#', icon: '\u2705', hint: 'Nh\u1eadp l\u1ea1i m\u1eadt kh\u1ea9u gi\u1ed1ng h\u1ec7t b\xean tr\xean \u0111\u1ec3 x\xe1c nh\u1eadn', color: '#16a34a' },
+  { keys: ['facebook','fb'], placeholder: 'facebook.com/nguyenvana', icon: '\uD83D\uDCAC', hint: 'Kh\xf4ng b\u1eaft bu\u1ed9c \u2014 gi\xfap h\u1ed7 tr\u1ee3 nhanh h\u01a1n khi c\u1ea7n', color: '#3b82f6' },
+  { keys: ['\u0111\u1ecba ch\u1ec9','address','li\xean l\u1ea1c'], placeholder: 'S\u1ed1 12, \u0110\u01b0\u1eddng ABC, Q.1, TP.HCM', icon: '\uD83D\uDCCD', hint: '\u0110\u1ecba ch\u1ec9 nh\u1eadn h\xe0ng \u0111\u1ea7y \u0111\u1ee7 \u2014 {{BRAND_NAME}} s\u1ebd giao \u0111\xfang t\u1eadn n\u01a1i', color: '#f59e0b' }
+  ];
+
+  function isRegPage() {
+  return window.location.href.indexOf('dang-ky') !== -1;
+  }
+
+  function cleanup() {
+  var w = document.getElementById('dx-reg-outer');
+  if (w) w.remove();
+  document.querySelectorAll('.dx-field-hint').forEach(function(el){ el.remove(); });
+  }
+
+  function getField(input) {
+  var name = (input.name || '').toLowerCase();
+  var id   = (input.id   || '').toLowerCase();
+  var ph   = (input.placeholder || '').toLowerCase();
+  var lblEl = null, el = input;
+  for (var i = 0; i < 6; i++) {
+  if (!el.parentElement) break;
+  el = el.parentElement;
+  var lb = el.querySelector('label');
+  if (lb) { lblEl = lb; break; }
+  }
+  var lbl = lblEl ? lblEl.textContent.toLowerCase() : '';
+  var combined = name + ' ' + id + ' ' + ph + ' ' + lbl;
+  for (var f = 0; f < FIELDS.length; f++) {
+  var fd = FIELDS[f];
+  for (var k = 0; k < fd.keys.length; k++) {
+  if (combined.indexOf(fd.keys[k]) !== -1) return fd;
+  }
+  }
+  return null;
+  }
+
+  function inject(card) {
+  if (document.getElementById('dx-reg-outer')) return;
+  if (!document.getElementById('dx-reg-css')) {
+  var s = document.createElement('style');
+  s.id = 'dx-reg-css';
+  s.textContent = '#dx-reg-outer{border-radius:18px;overflow:hidden;box-shadow:0 8px 40px rgba(45,122,31,.18),0 2px 8px rgba(0,0,0,.06);animation:dx-reg-in .4s cubic-bezier(.34,1.56,.64,1) both}@keyframes dx-reg-in{0%{opacity:0;transform:translateY(18px) scale(.97)}100%{opacity:1;transform:translateY(0) scale(1)}}#dx-reg-hero{background:linear-gradient(155deg,#1e6b10 0%,#3fa82f 45%,#85c756 100%);padding:24px 24px 20px;position:relative;overflow:hidden}#dx-reg-hero::before{content:"";position:absolute;top:-30px;right:-40px;width:170px;height:170px;border-radius:50%;background:rgba(255,255,255,.07)}.dx-rh-row{display:flex;align-items:center;gap:12px;margin-bottom:14px;position:relative;z-index:1}.dx-rh-ic{width:44px;height:44px;border-radius:13px;background:rgba(255,255,255,.2);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 2px 12px rgba(0,0,0,.15)}.dx-rh-tx h2{margin:0;font-size:16px;font-weight:700;color:#fff}.dx-rh-tx p{margin:1px 0 0;font-size:11px;color:rgba(255,255,255,.75);font-weight:500}.dx-rh-title{position:relative;z-index:1}.dx-rh-title h1{margin:0 0 6px;font-size:20px;font-weight:700;color:#fff;letter-spacing:-.3px}.dx-rh-notice{display:flex;align-items:flex-start;gap:8px;background:rgba(255,255,255,.16);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.28);border-radius:11px;padding:10px 12px;margin-top:12px}.dx-rh-notice .ni{font-size:16px;flex-shrink:0}.dx-rh-notice p{margin:0;font-size:12.5px;color:#fff;line-height:1.5;font-weight:500}.dx-field-hint{display:flex;align-items:center;gap:6px;margin-top:4px;padding:6px 10px;border-radius:8px;font-size:12px;line-height:1.4;max-height:0;overflow:hidden;opacity:0;transition:max-height .3s ease,opacity .25s ease,padding .25s ease}.dx-field-hint.dx-fh-open{max-height:60px;opacity:1}.dx-fh-icon{font-size:14px;flex-shrink:0}.dx-fh-ex{font-weight:700;font-size:11.5px}.dx-fh-desc{color:#6b7280;font-size:11px}.ant-input:focus,.ant-input-focused{border-color:#85c756!important;box-shadow:0 0 0 3px rgba(133,199,86,.22)!important;transition:box-shadow .2s,border-color .2s!important}.ant-btn-primary,.ant-btn-color-primary{box-shadow:0 4px 16px rgba(133,199,86,.4)!important;transition:transform .15s,box-shadow .15s!important}.ant-btn-primary:hover,.ant-btn-color-primary:hover{transform:translateY(-2px)!important;box-shadow:0 8px 24px rgba(133,199,86,.5)!important}#dx-reg-outer .ant-card{border:none!important;box-shadow:none!important;border-radius:0!important}#dx-submit-notice{display:none;margin-top:12px;padding:13px 15px;background:linear-gradient(135deg,#064e3b,#065f46);border-radius:13px;border:1px solid rgba(255,255,255,.15);box-shadow:0 6px 20px rgba(6,78,59,.3);animation:dx-reg-in .35s cubic-bezier(.34,1.1,.64,1) both}#dx-submit-notice a{color:#fde047;font-weight:700;text-decoration:underline}';
+  document.head.appendChild(s);
+  }
+
+  var outer = document.createElement('div');
+  outer.id = 'dx-reg-outer';
+  var hero = document.createElement('div');
+  hero.id = 'dx-reg-hero';
+  hero.innerHTML = '<div class="dx-rh-row"><div class="dx-rh-ic">\uD83D\uDECD\uFE0F</div><div class="dx-rh-tx"><h2>{{BRAND_NAME}}</h2><p>B\xe1n h\xe0ng 1 \u0111\u1ed5i 1 \u2022 Uy t\xedn \u2022 Gi\xe1 t\u1ed1t</p></div></div><div class="dx-rh-title"><h1>\uD83C\uDF89 \u0110\u0103ng k\xfd t\xe0i kho\u1ea3n</h1><p style="margin:6px 0 0;font-size:13px;color:rgba(255,255,255,.9);font-weight:500;line-height:1.55;">Anh em v\xe0o <a href="https://mail.google.com/mail/u/0/#inbox" target="_blank" style="color:#fde047;font-weight:700;text-decoration:underline;">Gmail</a> \u2014 ho\u1eb7c nh\u1eafn Zalo <a href="https://zalo.me/{{PHONE_NUMBER}}" target="_blank" style="color:#fde047;font-weight:700;text-decoration:underline;">{{PHONE_DOT}}</a> (em {{STAFF_NAME}}) \u0111\u1ec3 x\xe1c minh t\xe0i kho\u1ea3n tr\u01b0\u1edbc khi \u0111\u0103ng nh\u1eadp &#x1F44C;</p><div class="dx-rh-notice"><span class="ni">\uD83D\uDCCB</span><p>Anh em vui l\xf2ng \u0111i\u1ec1n \u0111\u1ea7y \u0111\u1ee7 th\xf4ng tin \u0111\u1ec3 {{BRAND_NAME}} g\u1eedi h\xe0ng ch\xednh x\xe1c, c\u1ea3m \u01a1n anh em \uD83D\uDC9A</p></div></div>';
+
+  card.parentNode.insertBefore(outer, card);
+  outer.appendChild(hero);
+  outer.appendChild(card);
+  card.style.border = 'none';
+  card.style.boxShadow = 'none';
+
+  function bindInputs() {
+  card.querySelectorAll('input').forEach(function(inp) {
+  if (inp.getAttribute('dx-bound')) return;
+  inp.setAttribute('dx-bound', '1');
+  var fd = getField(inp);
+  if (!fd) return;
+  if (!inp.placeholder || inp.placeholder.length < 3) inp.placeholder = fd.placeholder;
+  var insertAfter = inp, el = inp;
+  for (var i = 0; i < 4; i++) {
+  if (!el.parentElement) break;
+  el = el.parentElement;
+  if (el.classList && el.classList.contains('ant-form-item-control-input')) { insertAfter = el; break; }
+  }
+  var hint = document.createElement('div');
+  hint.className = 'dx-field-hint';
+  hint.style.background = fd.color + '14';
+  hint.style.border = '1px solid ' + fd.color + '33';
+  hint.style.color = fd.color;
+  hint.innerHTML = '<span class="dx-fh-icon">' + fd.icon + '</span><div class="dx-fh-text"><div class="dx-fh-ex">V\xed d\u1ee5: ' + fd.placeholder + '</div><div class="dx-fh-desc">' + fd.hint + '</div></div>';
+  if (insertAfter.nextSibling) insertAfter.parentNode.insertBefore(hint, insertAfter.nextSibling);
+  else insertAfter.parentNode.appendChild(hint);
+  inp.addEventListener('focus', function() { hint.classList.add('dx-fh-open'); });
+  inp.addEventListener('blur',  function() { hint.classList.remove('dx-fh-open'); });
+  });
+  }
+
+  function bindSubmit() {
+  var btn = card.querySelector('button[type="submit"].ant-btn-primary');
+  if (!btn || btn.getAttribute('dx-submit-bound')) return;
+  btn.setAttribute('dx-submit-bound', '1');
+  var notice = document.createElement('div');
+  notice.id = 'dx-submit-notice';
+  notice.innerHTML =
+  '<div style="display:flex;align-items:flex-start;gap:9px;"><span style="font-size:18px;flex-shrink:0;margin-top:1px;">&#x1F4EC;</span><div style="font-size:13px;color:rgba(255,255,255,.95);font-weight:500;line-height:1.6;">Anh em v\xe0o <a href="https://mail.google.com/mail/u/0/#inbox" target="_blank">Gmail</a> \u2014 ho\u1eb7c nh\u1eafn Zalo <a href="https://zalo.me/{{PHONE_NUMBER}}" target="_blank">{{PHONE_DOT}}</a> (em {{STAFF_NAME}}) \u0111\u1ec3 x\xe1c minh t\xe0i kho\u1ea3n tr\u01b0\u1edbc khi \u0111\u0103ng nh\u1eadp &#x1F44C;</div></div>';
+  if (btn.nextSibling) btn.parentNode.insertBefore(notice, btn.nextSibling);
+  else btn.parentNode.appendChild(notice);
+  btn.addEventListener('click', function() {
+  notice.style.display = 'block';
+  setTimeout(function() { notice.style.display = 'none'; }, 12000);
+  });
+  }
+
+  bindInputs();
+  bindSubmit();
+  new MutationObserver(function() { bindInputs(); bindSubmit(); }).observe(card, { childList: true, subtree: true });
+  }
+
+  function tryInjectNow() {
+  if (!isRegPage() || DONE) return;
+  if (document.getElementById('dx-reg-outer')) { DONE = true; return; }
+  var card = document.querySelector('.ant-card.ant-card-bordered.ant-card-small');
+  if (card) { DONE = true; inject(card); }
+  }
+
+  if (!window.__dxRegObsStarted) {
+  window.__dxRegObsStarted = true;
+
+  new MutationObserver(function(mutations) {
+  if (!isRegPage() || DONE) return;
+  for (var m = 0; m < mutations.length; m++) {
+  var nodes = mutations[m].addedNodes;
+  for (var n = 0; n < nodes.length; n++) {
+  var node = nodes[n];
+  if (!node || node.nodeType !== 1) continue;
+  var card = node.classList && node.classList.contains('ant-card')
+  ? node
+  : node.querySelector && node.querySelector('.ant-card.ant-card-bordered.ant-card-small');
+  if (card) { DONE = true; inject(card); return; }
+  }
+  }
+  }).observe(document.body, { childList: true, subtree: true });
+  }
+
+  if (!window.__dxRegPollStarted) {
+  window.__dxRegPollStarted = true;
+
+  setInterval(function() {
+  var cur = location.href;
+  if (cur !== lastUrl) {
+  lastUrl = cur;
+  DONE = false;
+  if (!isRegPage()) { cleanup(); return; }
+  setTimeout(tryInjectNow, 100);
+  setTimeout(tryInjectNow, 400);
+  setTimeout(tryInjectNow, 900);
+  setTimeout(tryInjectNow, 1800);
+  setTimeout(tryInjectNow, 3000);
+  }
+  tryInjectNow();
+  }, 400);
+  }
+
+  tryInjectNow();
+
+})();
+</script>
+
+<script>
+(function() {
+  function seededRandom(seed, min, max) {
+    var x = Math.sin(seed + 1) * 10000;
+    var r = x - Math.floor(x);
+    return Math.floor(r * (max - min + 1)) + min;
+  }
+
+  function getPageSeed() {
+    var url = window.location.href;
+    var hash = 0;
+    for (var i = 0; i < url.length; i++) {
+      hash = url.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return Math.abs(hash);
+  }
+
+  var seed = getPageSeed();
+
+  function genBreakdown(total) {
+    var p5 = seededRandom(seed + 10, 68, 80);
+    var p4 = seededRandom(seed + 11, 12, 20);
+    var five  = Math.floor(total * p5 / 100);
+    var four  = Math.floor(total * p4 / 100);
+    var three = total - five - four;
+    if (three < 0) three = 0;
+    return [five, four, three, 0, 0];
+  }
+
+  function fixBreakdownText(reviewCount) {
+    var breakdown = genBreakdown(reviewCount);
+    var all = document.querySelectorAll('*');
+    for (var i = 0; i < all.length; i++) {
+      var el = all[i];
+      if (el.childNodes.length !== 1 || el.childNodes[0].nodeType !== 3) continue;
+      var txt = el.textContent.trim();
+      var mStar = txt.match(/^(\d)\s+Sao\s+\((\d+)\)$/i);
+      if (mStar) {
+        var star = parseInt(mStar[1], 10);
+        var newCount = breakdown[5 - star] || 0;
+        el.textContent = star + ' Sao (' + newCount + ')';
+        continue;
+      }
+      var mAll = txt.match(/^Tất Cả\s+\((\d+)\)$/i);
+      if (mAll) {
+        el.textContent = 'Tất Cả (' + reviewCount + ')';
+        continue;
+      }
+    }
+  }
+
+  function injectRatingIntoTitleWrapper() {
+    var wrapper = document.getElementById('tms-title-wrapper');
+    if (!wrapper) return;
+    if (wrapper.getAttribute('data-gtm-rating-injected')) return;
+
+    var starInt     = seededRandom(seed,     40, 50);
+    var starAvg     = (starInt / 10).toFixed(1);
+    var buyCount    = seededRandom(seed + 2, 50, 400);
+    var reviewPct   = seededRandom(seed + 1, 20, 70);
+    var reviewCount = Math.floor(buyCount * reviewPct / 100);
+    if (reviewCount < 5) reviewCount = 5;
+
+    var fullStars = Math.floor(starAvg);
+    var hasHalf   = (starAvg - fullStars) >= 0.5;
+    var starsHtml = '';
+    for (var i = 0; i < 5; i++) {
+      if (i < fullStars) {
+        starsHtml += '<span style="color:#faad14;font-size:15px;">★</span>';
+      } else if (i === fullStars && hasHalf) {
+        starsHtml += '<span style="color:#faad14;font-size:15px;">⯨</span>';
+      } else {
+        starsHtml += '<span style="color:#ddd;font-size:15px;">★</span>';
+      }
+    }
+
+    var ratingRow = document.createElement('div');
+    ratingRow.setAttribute('data-gtm-title-rating', '1');
+    ratingRow.style.cssText = 'display:flex;align-items:center;gap:0;flex-wrap:wrap;margin-top:8px;';
+    ratingRow.innerHTML =
+      starsHtml +
+      '<span style="font-weight:700;color:#faad14;font-size:14px;margin-left:4px;">' + starAvg + '</span>' +
+      '<span style="margin-left:8px;color:#555;font-size:12.5px;border-left:1px solid #ddd;padding-left:8px;">' + reviewCount + ' Đánh Giá</span>' +
+      '<span style="margin-left:8px;color:#555;font-size:12.5px;border-left:1px solid #ddd;padding-left:8px;">🛒 ' + buyCount + ' Lượt mua</span>';
+
+    var innerDiv = wrapper.querySelector('div');
+    if (innerDiv) {
+      innerDiv.appendChild(ratingRow);
+    } else {
+      wrapper.appendChild(ratingRow);
+    }
+
+    wrapper.setAttribute('data-gtm-rating-injected', '1');
+
+    setTimeout(function() { fixBreakdownText(reviewCount); }, 300);
+    setTimeout(function() { fixBreakdownText(reviewCount); }, 1000);
+  }
+
+  function modifyRating() {
+    injectRatingIntoTitleWrapper();
+
+    var rateContainers = document.querySelectorAll('.flex.items-center.gap-2.text-sm');
+    rateContainers.forEach(function(container) {
+      if (container.getAttribute('data-gtm-modified')) return;
+      var rateEl = container.querySelector('.ant-rate');
+      if (!rateEl) return;
+
+      var starInt     = seededRandom(seed,     40, 50);
+      var starAvg     = (starInt / 10).toFixed(1);
+      var buyCount    = seededRandom(seed + 2, 50, 400);
+      var reviewPct   = seededRandom(seed + 1, 20, 70);
+      var reviewCount = Math.floor(buyCount * reviewPct / 100);
+      if (reviewCount < 5) reviewCount = 5;
+
+      var starItems = rateEl.querySelectorAll('.ant-rate-star');
+      var fullStars = Math.floor(starAvg);
+      var hasHalf   = (starAvg - fullStars) >= 0.5;
+
+      starItems.forEach(function(item, index) {
+        item.classList.remove('ant-rate-star-full', 'ant-rate-star-half', 'ant-rate-star-zero');
+        if (index < fullStars) {
+          item.classList.add('ant-rate-star-full');
+        } else if (index === fullStars && hasHalf) {
+          item.classList.add('ant-rate-star-half');
+        } else {
+          item.classList.add('ant-rate-star-zero');
+        }
+      });
+
+      var avgSpan = document.createElement('span');
+      avgSpan.style.cssText = 'font-weight:700;color:#faad14;font-size:15px;margin-right:4px;';
+      avgSpan.textContent = starAvg;
+
+      var reviewSpan = document.createElement('span');
+      reviewSpan.style.cssText = 'margin-left:8px;color:#555;font-size:13px;border-left:1px solid #ddd;padding-left:8px;';
+      reviewSpan.textContent = reviewCount + ' Đánh Giá';
+
+      var buySpan = document.createElement('span');
+      buySpan.style.cssText = 'margin-left:8px;color:#555;font-size:13px;border-left:1px solid #ddd;padding-left:8px;';
+      buySpan.innerHTML = '&#128722; ' + buyCount + ' Lượt mua';
+
+      container.insertBefore(avgSpan, rateEl);
+      container.appendChild(reviewSpan);
+      container.appendChild(buySpan);
+      container.setAttribute('data-gtm-modified', '1');
+
+      setTimeout(function() { fixBreakdownText(reviewCount); }, 300);
+      setTimeout(function() { fixBreakdownText(reviewCount); }, 1000);
+    });
+  }
+
+  modifyRating();
+
+  var observer = new MutationObserver(function(mutations) {
+    for (var i = 0; i < mutations.length; i++) {
+      if (mutations[i].addedNodes.length > 0) { modifyRating(); break; }
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+  setTimeout(function() { observer.disconnect(); }, 15000);
+
+  setTimeout(modifyRating, 1000);
+  setTimeout(modifyRating, 3000);
+  setTimeout(modifyRating, 6000);
+
+  var lastUrl = location.href;
+  setInterval(function() {
+    if (location.href !== lastUrl) {
+      lastUrl = location.href;
+      var w = document.getElementById('tms-title-wrapper');
+      if (w) w.removeAttribute('data-gtm-rating-injected');
+      observer.observe(document.body, { childList: true, subtree: true });
+      setTimeout(modifyRating, 500);
+      setTimeout(modifyRating, 1500);
+      setTimeout(function() { observer.disconnect(); }, 15000);
+    }
+  }, 1000);
+})();
+</script>
