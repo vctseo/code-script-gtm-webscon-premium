@@ -21,15 +21,7 @@ export const SCRIPT_TEMPLATES: ScriptTemplate[] = [
     name: "[Trang sản phẩm] Sale badge & nhãn sản phẩm",
     description: "Tự động gắn nhãn sale event và nhãn trạng thái (Cháy hàng, ế! Xả Kho, Hàng còn ít, Yêu thích nhất) ngẫu nhiên lên TẤT CẢ URL sản phẩm có dạng _p trên trang",
     category: "Trang sản phẩm",
-    fields: [
-      {
-        key: "DOMAIN_LOCK",
-        label: "Khóa domain (để trống = không khóa)",
-        placeholder: "example.com",
-        type: "text",
-        description: "Chỉ chạy script trên domain này. Để trống nếu muốn chạy trên mọi domain"
-      }
-    ],
+    fields: [],
     template: `<style>
 .jj-sale-badge{position:absolute;bottom:0;left:0;z-index:10;display:flex;align-items:stretch;border-radius:0 6px 0 0;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.28);pointer-events:none;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;line-height:1;}
 .jj-b-red{background:#e31c23;color:#fff;font-size:15px;font-weight:900;padding:4px 7px 4px 5px;display:flex;align-items:center;position:relative;}
@@ -163,18 +155,10 @@ window.addEventListener("popstate",function(){setTimeout(scan,400);});
         placeholder: "{ slug: 'p126785', phanTram: 0.32 },",
         type: "textarea",
         description: "Danh sách cấu hình — được quản lý qua giao diện bên dưới, không cần sửa tay"
-      },
-      {
-        key: "DOMAIN_LOCK",
-        label: "Khóa domain (để trống = không khóa)",
-        placeholder: "example.com",
-        type: "text",
-        description: "Chỉ chạy script trên domain này. Để trống nếu muốn chạy trên mọi domain"
       }
     ],
     template: `<script>
 (function(){
-  {{DOMAIN_LOCK_LINE}}
   var CAU_HINH=[
     {{CAU_HINH_ENTRIES}}
   ];
@@ -312,18 +296,10 @@ window.addEventListener("popstate",function(){setTimeout(scan,400);});
         placeholder: "Ví dụ: #66ba32 — bỏ trống = xanh lá mặc định",
         type: "color",
         description: "Mã hex màu chủ đạo — VD: #ee4d2d (đỏ), #2563eb (xanh dương), #66ba32 (xanh lá). Màu đậm hơn sẽ tự tính."
-      },
-      {
-        key: "DOMAIN_LOCK",
-        label: "Domain khóa (tùy chọn)",
-        placeholder: "phanphan.vn",
-        type: "text",
-        description: "Để trống = không khóa. Điền domain = tự động chèn lock code — dock, footer, popup đều bị chặn khi sai domain"
       }
     ],
     template: `<script>
 (function(){
-  {{DOMAIN_LOCK_LINE}}
   /* ── MÀU THƯƠNG HIỆU ── */
   var C1 = '{{PRIMARY_COLOR}}' || '#66ba32';
   var C2 = (function(h){
@@ -1676,13 +1652,6 @@ h1.ant-typography.font-normal {
         placeholder: "Ví dụ: #499421 — bỏ trống = xanh lá mặc định",
         type: "color",
         description: "Mã hex màu chủ đạo cho menu bottom nav — VD: #ee4d2d (đỏ), #2563eb (xanh dương), #499421 (xanh lá). Màu đậm hơn sẽ tự tính."
-      },
-      {
-        key: "DOMAIN_LOCK",
-        label: "Khóa domain (để trống = không khóa)",
-        placeholder: "example.com",
-        type: "text",
-        description: "Chỉ chạy script trên domain này. Để trống nếu muốn chạy trên mọi domain"
       }
     ],
     template: `<style>
@@ -2039,13 +2008,6 @@ div.mb-4.flex.flex-col.gap-4.px-4.lg\\:flex-row.lg\\:items-center {
         placeholder: "384",
         type: "text",
         description: "Để trống: script tự tìm từ dữ liệu trang (__NEXT_DATA__, script tags). Điền nếu không tự nhận diện được — xem trong Network tab, header X-Tenant-ID khi vào trang /flash-sale."
-      },
-      {
-        key: "DOMAIN_LOCK",
-        label: "Khóa domain (để trống = không khóa)",
-        placeholder: "example.com",
-        type: "text",
-        description: "Chỉ chạy script trên domain này. Để trống nếu muốn chạy trên mọi domain"
       }
     ],
     template: `<style>
