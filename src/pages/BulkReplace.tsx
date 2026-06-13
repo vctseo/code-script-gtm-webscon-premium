@@ -2,7 +2,7 @@ import { useState, useMemo, useRef } from "react";
 import { Link } from "wouter";
 import {
   ArrowLeft, Copy, Check, RefreshCw, Layers, Phone, User, Globe,
-  ClipboardPaste, ChevronDown, ChevronUp, Lock, ShieldCheck, Palette,
+  ClipboardPaste, ChevronDown, ChevronUp, Palette,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,30 +19,11 @@ const STAFF_TOTAL   = (rawScript.match(/\{\{STAFF_NAME\}\}/g)    || []).length;
 const SITE_TOTAL    = (rawScript.match(/\{\{SITE\}\}/g)          || []).length;
 const TOTAL_ALL     = BRAND_TOTAL + PHONE_TOTAL + STAFF_TOTAL + SITE_TOTAL;
 
-const IIFE_COUNT    = (rawScript.match(/\(function\s*\(\s*\)\s*\{/g) || []).length;
-
 function formatPhoneDot(raw: string): string {
   const d = raw.replace(/\D/g, "");
   if (d.length === 10) return `${d.slice(0,4)}.${d.slice(4,7)}.${d.slice(7)}`;
   if (d.length === 11) return `${d.slice(0,4)}.${d.slice(4,7)}.${d.slice(7)}`;
   return d;
-}
-
-function djb2(s: string): number {
-  let h = 5381;
-  for (let i = 0; i < s.length; i++) {
-    h = (Math.imul(h, 33) + s.charCodeAt(i)) | 0;
-  }
-  return h;
-}
-
-function normalizeDomain(raw: string): string {
-  return raw.trim()
-    .replace(/^https?:\/\//i, "")
-    .replace(/^www\./i, "")
-    .split("/")[0]
-    .split("?")[0]
-    .toLowerCase();
 }
 
 const BRAND_COLOR_HEXES = ["#003366", "#008C99", "#D1C300", "#D4AF37"];
@@ -113,7 +94,6 @@ export default function BulkReplace() {
   const [phoneNumber,  setPhoneNumber]  = useState("");
   const [staffName,    setStaffName]    = useState("");
   const [siteUrl,      setSiteUrl]      = useState("");
-  const [lockDomain,   setLockDomain]   = useState("");
   const [brandColor,   setBrandColor]   = useState("");
   const [rgbaInput,    setRgbaInput]    = useState("");
   const [copied,       setCopied]       = useState(false);
@@ -126,14 +106,7 @@ export default function BulkReplace() {
   const rawPhone      = phoneNumber.replace(/\D/g, "");
   const dotPhone      = formatPhoneDot(rawPhone);
   const cleanSite     = siteUrl.trim().replace(/\/$/, "");
-  const cleanLockDom  = lockDomain.trim() ? normalizeDomain(lockDomain) : "";
   const cleanColor    = normalizeHex(brandColor);
-
-  const lockLine = useMemo(() => {
-    if (!cleanLockDom) return null;
-    const hash = djb2(cleanLockDom);
-    return `var _L=${hash},_f=function(s){var h=5381;for(var i=0;i<s.length;i++){h=(Math.imul(h,33)+s.charCodeAt(i))|0;}return h;},_d=location.hostname.replace(/^www\\./,'');if(_f(_d)!==_L)return;`;
-  }, [cleanLockDom]);
 
   const outputScript = useMemo(() => {
     let s = rawScript;
@@ -142,16 +115,13 @@ export default function BulkReplace() {
     s = s.split("{{PHONE_DOT}}").join(dotPhone          || "{{PHONE_DOT}}");
     s = s.split("{{STAFF_NAME}}").join(staffName.trim() || "{{STAFF_NAME}}");
     s = s.split("{{SITE}}").join(cleanSite              || "{{SITE}}");
-    if (lockLine) {
-      s = s.replace(/\(function\s*\(\s*\)\s*\{/g, `(function(){\n  ${lockLine}`);
-    }
     if (cleanColor) {
       for (const orig of BRAND_COLOR_HEXES) {
         s = s.split(orig).join(cleanColor);
       }
     }
     return s;
-  }, [brandName, rawPhone, dotPhone, staffName, cleanSite, lockLine, cleanColor]);
+  }, [brandName, rawPhone, dotPhone, staffName, cleanSite, cleanColor]);
 
   const canCopy = brandName.trim().length > 0
                && rawPhone.length >= 9
@@ -186,10 +156,8 @@ export default function BulkReplace() {
       await navigator.clipboard.writeText(outputScript);
       setCopied(true);
       toast({
-        title: lockLine ? "Đã copy! (đã khoá domain)" : "Đã copy!",
-        description: lockLine
-          ? `Script (${outputScript.length.toLocaleString()} ký tự) đã khoá cho ${cleanLockDom}.`
-          : `Script (${outputScript.length.toLocaleString()} ký tự) đã được copy vào clipboard.`,
+        title: "Đã copy!",
+        description: `Script (${outputScript.length.toLocaleString()} ký tự) đã được copy vào clipboard.`,
       });
       setTimeout(() => setCopied(false), 2500);
     } catch {
@@ -208,7 +176,6 @@ export default function BulkReplace() {
     setPhoneNumber("");
     setStaffName("");
     setSiteUrl("");
-    setLockDomain("");
     setBrandColor("");
     setRgbaInput("");
     setPasteText("");
@@ -235,11 +202,6 @@ export default function BulkReplace() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            {lockLine && (
-              <Badge className="text-xs bg-indigo-600 text-white gap-1 hidden sm:flex">
-                <Lock className="w-3 h-3" /> Đã khoá
-              </Badge>
-            )}
             <Badge variant="secondary" className="text-xs hidden sm:flex">
               {TOTAL_ALL} vị trí thay thế
             </Badge>
@@ -254,8 +216,6 @@ export default function BulkReplace() {
           <p className="text-violet-700 text-xs leading-relaxed">
             Nhập tên thương hiệu, số điện thoại, tên nhân viên và domain website. Toàn bộ{" "}
             <strong>{TOTAL_ALL} vị trí</strong> ({BRAND_TOTAL} thương hiệu + {PHONE_TOTAL} số điện thoại + {STAFF_TOTAL} nhân viên + {SITE_TOTAL} domain) sẽ được thay thế tự động.
-            Điền thêm <strong>Domain khóa</strong> để tự động nhúng lock code vào toàn bộ{" "}
-            <strong>{IIFE_COUNT} script block</strong>.
           </p>
         </div>
 
@@ -448,49 +408,6 @@ export default function BulkReplace() {
               <p className="text-xs text-gray-400">
                 Nhập domain không có dấu / cuối. Placeholder:{" "}
                 <code className="bg-gray-100 px-1 rounded">{"{{SITE}}"}</code>
-              </p>
-            )}
-          </div>
-
-          {/* Lock domain field — OPTIONAL */}
-          <div className="pt-1 border-t border-dashed border-gray-200 space-y-2">
-            <Label htmlFor="lock-domain" className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-              <Lock className="w-4 h-4 text-indigo-500" />
-              Domain khóa
-              <span className="text-xs font-normal text-gray-400">(tùy chọn)</span>
-              <span className="ml-auto text-xs font-normal text-indigo-500 bg-indigo-50 px-1.5 py-0.5 rounded">
-                {IIFE_COUNT} script block
-              </span>
-            </Label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <Input
-                id="lock-domain"
-                placeholder="Ví dụ: tienloi.requa.vn — bỏ trống = không khóa"
-                value={lockDomain}
-                onChange={(e) => setLockDomain(e.target.value)}
-                className="pl-9 text-sm"
-                inputMode="url"
-              />
-            </div>
-            {cleanLockDom ? (
-              <div className="flex items-start gap-2 p-3 bg-indigo-50 border border-indigo-200 rounded-lg">
-                <ShieldCheck className="w-4 h-4 text-indigo-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-xs text-indigo-700 font-semibold">
-                    Sẽ inject lock code vào {IIFE_COUNT} script block
-                  </p>
-                  <p className="text-xs text-indigo-600 mt-0.5">
-                    Domain được khóa: <strong>{cleanLockDom}</strong>
-                    {" "}— script tự thoát im lặng nếu chạy trên domain khác.
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <p className="text-xs text-gray-400">
-                Bỏ trống = không khóa. Điền domain để tự động nhúng lock code vào mọi{" "}
-                <code className="bg-gray-100 px-1 rounded">(function(){"{"}</code>{" "}
-                trong toàn bộ script.
               </p>
             )}
           </div>
