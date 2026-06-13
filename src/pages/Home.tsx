@@ -58,10 +58,25 @@ export default function Home() {
 
       <main className="max-w-6xl mx-auto px-4 py-8 space-y-8">
         <div className="space-y-3">
-        {/* #1 — Sale badge */}
+        {/* #1 — Trang Chủ: Trang trí trang chủ, popup */}
+        <Link href="/template/warehouse-contact">
+          <div className="flex items-center gap-4 bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl px-5 py-4 cursor-pointer hover:from-blue-700 hover:to-blue-600 transition-all shadow-sm group">
+            <div className="w-7 h-7 rounded-full bg-white/25 flex items-center justify-center flex-shrink-0 text-sm font-extrabold text-white">1</div>
+            <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0 text-lg">🏠</div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-bold text-white leading-snug">[Trang Chủ] Trang trí trang chủ, popup</p>
+              <p className="text-xs text-blue-200 mt-0.5">4 script tổng hợp: địa chỉ bảo hành, nút Zalo/gọi cố định, footer liên hệ và popup đăng nhập</p>
+            </div>
+            <div className="text-white/60 group-hover:text-white transition-colors flex-shrink-0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </div>
+        </Link>
+
+        {/* #2 — Sale badge */}
         <Link href="/template/sale-badge">
           <div className="flex items-center gap-4 bg-gradient-to-r from-orange-500 to-orange-400 rounded-xl px-5 py-4 cursor-pointer hover:from-orange-600 hover:to-orange-500 transition-all shadow-sm group">
-            <div className="w-7 h-7 rounded-full bg-white/25 flex items-center justify-center flex-shrink-0 text-sm font-extrabold text-white">1</div>
+            <div className="w-7 h-7 rounded-full bg-white/25 flex items-center justify-center flex-shrink-0 text-sm font-extrabold text-white">2</div>
             <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0 text-lg">🏷️</div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-bold text-white leading-snug">[Trang sản phẩm] Sale badge & nhãn sản phẩm</p>
@@ -73,10 +88,10 @@ export default function Home() {
           </div>
         </Link>
 
-        {/* #2 — Trang trí trang sản phẩm */}
+        {/* #3 — Trang trí trang sản phẩm */}
         <Link href="/bulk-replace">
           <div className="flex items-center gap-4 bg-gradient-to-r from-violet-600 to-violet-500 rounded-xl px-5 py-4 cursor-pointer hover:from-violet-700 hover:to-violet-600 transition-all shadow-sm group">
-            <div className="w-7 h-7 rounded-full bg-white/25 flex items-center justify-center flex-shrink-0 text-sm font-extrabold text-white">2</div>
+            <div className="w-7 h-7 rounded-full bg-white/25 flex items-center justify-center flex-shrink-0 text-sm font-extrabold text-white">3</div>
             <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0">
               <Layers className="w-5 h-5 text-white" />
             </div>
@@ -90,10 +105,10 @@ export default function Home() {
           </div>
         </Link>
 
-        {/* #3 — Ẩn Kho ảo + Gửi từ + Bottom nav */}
+        {/* #4 — Ẩn Kho ảo + Gửi từ + Bottom nav */}
         <Link href="/template/hide-kho-ao">
           <div className="flex items-center gap-4 bg-gradient-to-r from-slate-600 to-slate-500 rounded-xl px-5 py-4 cursor-pointer hover:from-slate-700 hover:to-slate-600 transition-all shadow-sm group">
-            <div className="w-7 h-7 rounded-full bg-white/25 flex items-center justify-center flex-shrink-0 text-sm font-extrabold text-white">3</div>
+            <div className="w-7 h-7 rounded-full bg-white/25 flex items-center justify-center flex-shrink-0 text-sm font-extrabold text-white">4</div>
             <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0 text-lg">🙈</div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-bold text-white leading-snug">[Trang sản phẩm] Ẩn badge "Kho ảo" + "Gửi từ" + Menu mobile bottom nav</p>
@@ -105,10 +120,10 @@ export default function Home() {
           </div>
         </Link>
 
-        {/* #4 — Flash Sale */}
+        {/* #5 — Flash Sale */}
         <Link href="/template/flash-sale-combo">
           <div className="flex items-center gap-4 bg-gradient-to-r from-red-600 to-orange-500 rounded-xl px-5 py-4 cursor-pointer hover:from-red-700 hover:to-orange-600 transition-all shadow-sm group">
-            <div className="w-7 h-7 rounded-full bg-white/25 flex items-center justify-center flex-shrink-0 text-sm font-extrabold text-white">4</div>
+            <div className="w-7 h-7 rounded-full bg-white/25 flex items-center justify-center flex-shrink-0 text-sm font-extrabold text-white">5</div>
             <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0 text-lg">⚡</div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-bold text-white leading-snug">[Trang chủ] Flash Sale — Widget + Sản phẩm bán chạy + Banner</p>
@@ -120,10 +135,10 @@ export default function Home() {
           </div>
         </Link>
 
-        {/* #5 — Hiển thị giá ưu đãi */}
+        {/* #6 — Hiển thị giá ưu đãi */}
         <Link href="/template/sale-price">
           <div className="flex items-center gap-4 bg-gradient-to-r from-rose-500 to-rose-400 rounded-xl px-5 py-4 cursor-pointer hover:from-rose-600 hover:to-rose-500 transition-all shadow-sm group">
-            <div className="w-7 h-7 rounded-full bg-white/25 flex items-center justify-center flex-shrink-0 text-sm font-extrabold text-white">5</div>
+            <div className="w-7 h-7 rounded-full bg-white/25 flex items-center justify-center flex-shrink-0 text-sm font-extrabold text-white">6</div>
             <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0 text-lg">💰</div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-bold text-white leading-snug">[Trang sản phẩm] Hiển thị giá ưu đãi ngoài website</p>
@@ -135,29 +150,14 @@ export default function Home() {
           </div>
         </Link>
 
-        {/* #6 — Video avatar */}
+        {/* #7 — Video avatar */}
         <Link href="/template/video-avatar">
           <div className="flex items-center gap-4 bg-gradient-to-r from-purple-600 to-purple-500 rounded-xl px-5 py-4 cursor-pointer hover:from-purple-700 hover:to-purple-600 transition-all shadow-sm group">
-            <div className="w-7 h-7 rounded-full bg-white/25 flex items-center justify-center flex-shrink-0 text-sm font-extrabold text-white">6</div>
+            <div className="w-7 h-7 rounded-full bg-white/25 flex items-center justify-center flex-shrink-0 text-sm font-extrabold text-white">7</div>
             <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0 text-lg">▶️</div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-bold text-white leading-snug">[Trang sản phẩm] Video avatar (YouTube thay ảnh)</p>
               <p className="text-xs text-purple-200 mt-0.5">Thay thế ảnh sản phẩm bằng video YouTube tự động phát theo ánh xạ ID ảnh → YouTube ID</p>
-            </div>
-            <div className="text-white/60 group-hover:text-white transition-colors flex-shrink-0">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-            </div>
-          </div>
-        </Link>
-
-        {/* #7 — Trang Chủ: Trang trí trang chủ, popup */}
-        <Link href="/template/warehouse-contact">
-          <div className="flex items-center gap-4 bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl px-5 py-4 cursor-pointer hover:from-blue-700 hover:to-blue-600 transition-all shadow-sm group">
-            <div className="w-7 h-7 rounded-full bg-white/25 flex items-center justify-center flex-shrink-0 text-sm font-extrabold text-white">7</div>
-            <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0 text-lg">🏠</div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-white leading-snug">[Trang Chủ] Trang trí trang chủ, popup</p>
-              <p className="text-xs text-blue-200 mt-0.5">4 script tổng hợp: địa chỉ bảo hành, nút Zalo/gọi cố định, footer liên hệ và popup đăng nhập</p>
             </div>
             <div className="text-white/60 group-hover:text-white transition-colors flex-shrink-0">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
