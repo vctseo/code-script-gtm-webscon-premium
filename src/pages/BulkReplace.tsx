@@ -538,18 +538,13 @@ export default function BulkReplace() {
           <div className="flex gap-3">
             <Button
               onClick={handleCopy}
-              className={`flex-1 gap-2 text-white ${lockLine ? "bg-indigo-600 hover:bg-indigo-700" : "bg-violet-600 hover:bg-violet-700"}`}
+              className="flex-1 gap-2 text-white bg-violet-600 hover:bg-violet-700"
               disabled={!canCopy}
             >
               {copied ? (
                 <>
                   <Check className="w-4 h-4" />
                   Đã copy!
-                </>
-              ) : lockLine ? (
-                <>
-                  <Lock className="w-4 h-4" />
-                  Copy script (đã khoá)
                 </>
               ) : (
                 <>
@@ -558,7 +553,7 @@ export default function BulkReplace() {
                 </>
               )}
             </Button>
-            {(brandName || phoneNumber || staffName || siteUrl || lockDomain || brandColor) && (
+            {(brandName || phoneNumber || staffName || siteUrl || brandColor) && (
               <Button
                 variant="ghost"
                 size="icon"
@@ -586,11 +581,6 @@ export default function BulkReplace() {
               <Badge variant="outline" className="text-xs">
                 {outputScript.length.toLocaleString()} ký tự
               </Badge>
-              {lockLine && (
-                <Badge className="text-xs bg-indigo-100 text-indigo-700 border-indigo-200 gap-1">
-                  <Lock className="w-2.5 h-2.5" /> {IIFE_COUNT} block đã khoá
-                </Badge>
-              )}
             </div>
             <Button
               variant="outline"
